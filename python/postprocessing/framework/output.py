@@ -36,7 +36,7 @@ class OutputBranch:
         elif self.n == 1: 
             self.buff[0] = self.precision(val)
         else:
-            if len(val) != self.n: raise RuntimeError("Mismatch in filling branch %s of fixed length %d with %d values (%s)" % (self.Branch.GetName(),self.n,len(val),val))
+            if len(val) != self.n: raise RuntimeError("Mismatch in filling branch %s of fixed length %d with %d values (%s)" % (self.branch.GetName(),self.n,len(val),val))
             for i,v in enumerate(val): self.buff[i] = v
 
 class OutputTree:
