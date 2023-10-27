@@ -22,6 +22,7 @@ from PhysicsTools.NanoAODTools.postprocessing.modules.common.PrefireCorr import 
 from PhysicsTools.NanoAODTools.postprocessing.modules.skimNRecoLeps5TeV import skimRecoLeps5TeV
 from PhysicsTools.NanoAODTools.postprocessing.modules.skimNRecoLeps5TeVdimu import skimRecoLeps5TeVdimu
 from PhysicsTools.NanoAODTools.postprocessing.modules.skimNRecoLepsRun3 import *
+from PhysicsTools.NanoAODTools.postprocessing.modules.noSkim import *
 from PhysicsTools.NanoAODTools.postprocessing.modules.addTnPvarMuon import *
 from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetRecalib import *
 isData    = 'data' in sys.argv[-1] or 'Data' in sys.argv[-1]
@@ -41,11 +42,7 @@ era = '' if not 'era' in sys.argv[-1] else sys.argv[-1][sys.argv[-1].find('era')
 if era !='': print '>Found era: ', era
 
 #####CUT
-if not isData:
-  cut = '((nElectron + nMuon) >= 2 || (nGenDressedLepton >= 2))'
-  #cut = '(nElectron >= 1 && nMuon >= 1)'
-else:
-  cut = '((nElectron + nMuon) >= 2)'
+cut = "((nMuon + nElectron >= 1) && nJet >= 1 && Sum$(Jet_pt > 25 && abs(Jet_eta)<2.4) >= 1 && Sum$(Muon_pt > 10 && Muon_miniPFRelIso_all < 0.4 && Muon_sip3d < 8) Sum$(Electron_pt > 10 && Electron_miniPFRelIso_all < 0.4 && Electron_sip3d < 8) >= 1)"
 
 ### Json file
 jsonfile = runsAndLumis()
@@ -105,7 +102,7 @@ if doTnP:
 else:
   if not doNotSkim: 
     if year == 22:
-      mod.append(skimRecoLepsRun3(isData))
+      mod.append(noskim)
     elif year == 5:
       print("Adding 5 TeV skim!!")
       mod.append(skimRecoLeps5TeV())
